@@ -20,6 +20,7 @@ with open('data/places.json') as f:
 # In-memory storage for new reviews
 new_reviews = []
 
+
 @app.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email')
@@ -33,6 +34,7 @@ def login():
 
     access_token = create_access_token(identity=user['id'])
     return jsonify(access_token=access_token)
+
 
 @app.route('/places', methods=['GET'])
 def get_places():
@@ -51,6 +53,7 @@ def get_places():
         for place in places
     ]
     return jsonify(response)
+
 
 @app.route('/places/<place_id>', methods=['GET'])
 def get_place(place_id):
@@ -79,6 +82,7 @@ def get_place(place_id):
     }
     return jsonify(response)
 
+
 @app.route('/places/<place_id>/reviews', methods=['POST'])
 @jwt_required()
 def add_review(place_id):
@@ -98,6 +102,7 @@ def add_review(place_id):
 
     new_reviews.append(new_review)
     return jsonify({"msg": "Review added"}), 201
+
 
 if __name__ == '__main__':
     app.run(debug=True)
