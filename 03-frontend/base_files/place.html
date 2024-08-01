@@ -7,20 +7,55 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="index.html">
+                <img src="logo.png" alt="App Logo" class="logo">
+            </a>
+        </nav>
+        <nav>
+            <a href="login.html" id="login-link">Login</a>
+        </nav>
+    </header>
     <main>
         <section id="place-details">
-            <!-- Place details will be populated dynamically -->
+            <div class="place-card-large">
+                <img src="./images/Beach house.jpeg" alt="beach-house" class="place-image">
+                <h2>Beautiful Beach House</h2>
+                <p>Price Per Night: $100</p>
+                <p>Location: Los Angeles, United States</p>
+            </div>
         </section>
         <section id="reviews">
-            <!-- Reviews will be populated dynamically -->
+            <h2>Reviews</h2>
+            <div class="review-card">
+                <h2>Jane Smith</h2>
+                <p>Price Per Night: $100</p>
+                <p>Location: Los Angeles, United States</p>
+            </div>
+            <div class="review-card">
+                <h2>John Doe</h2>
+                <p>Price Per Night: $100</p>
+                <p>Location: Los Angeles, United States</p>
+            </div>
         </section>
         <section id="add-review">
-            <h2>Add a Review</h2>
+            <a href="./add_review.html"></a>
+                <button id="add-review-button">Add a Review</button>
+            </a>
             <form id="review-form">
-                <label for="review-text">Review:</label>
+                <label for="review-text">Your Review:</label>
                 <textarea id="review-text" name="review-text" required></textarea>
                 
-                <button type="submit">Submit</button>
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Star</option>
+                    <option value="3">3 Star</option>
+                    <option value="4">4 Star</option>
+                    <option value="5">5 Star</option>
+                </select>
+                <button type="submit" id="submit">Submit</button>
             </form>
         </section>
     </main>

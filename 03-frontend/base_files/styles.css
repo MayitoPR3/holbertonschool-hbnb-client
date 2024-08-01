@@ -64,6 +64,18 @@ footer {
     gap: 20px;
 }
 
+.place-card-large {
+    width: 100%;
+    height: auto;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    text-align: center;
+    line-height: 2rem;
+}
+
 /* Place Card */
 .place-card {
     width: 30%;
@@ -74,6 +86,7 @@ footer {
     border-radius: 10px;
     background-color: #fff;
     text-align: center;
+    line-height: 2rem;
 }
 
 /*Review Card */
@@ -82,17 +95,23 @@ footer {
     height: auto;
     margin: 10px auto;
     padding: 10px;
-
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    line-height: 3rem;
 }
 
 /* Place Image */
 .place-image {
-    width: 50%;
+    width: 100%;
+    height: auto;
     border-radius: 10px;
 }
 
 .place-image-large {
-
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
 }
 
 /* Place Details */
@@ -105,14 +124,73 @@ footer {
 
 }
 
-/* Add Review Box */
-.add-review {
-
+/* Add Review */
+#add-review {
+    margin-top: 2rem;
 }
 
-/* Form */
-.form {
+/* Add Review Button */
+#add-review-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: none;
+}
 
+#add-review-button:hover {
+    background-color: #0056b3;
+}
+
+/* Review Form */
+#review-form {
+    display: none; /* Hide the form by default */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+#review-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#review-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#review-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+
+
+
+#review-text {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 /* Details Button */
@@ -127,10 +205,38 @@ footer {
     border-radius: 10px;
 }
 
+#submit {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+#submit:hover {
+    background-color: #218838;
+}
+
 #login-link {
     text-decoration: none;
     color: #000000;
     text-align: end;
     padding: 10px 15px;
     border-radius: 5px;
+}
+
+#login-form {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    line-height: 5rem;
+}
+
+/* Ensuring that form elements take up full width of their container */
+#review-form input, #review-form textarea, #review-form select {
+    box-sizing: border-box;
 }

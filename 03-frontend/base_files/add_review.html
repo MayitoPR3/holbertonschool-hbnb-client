@@ -8,16 +8,22 @@
 </head>
 <body>
     <main>
-        <form id="review-form">
-            <h2>Add a Review</h2>
-            <label for="place">Place:</label>
-            <input type="text" id="place" name="place" readonly>
-            
-            <label for="review">Review:</label>
-            <textarea id="review" name="review" required></textarea>
-            
-            <button type="submit">Submit</button>
-        </form>
+        <section id="add-review">
+            <form id="review-form">
+                <label for="review-text">Your Review:</label>
+                <textarea id="review-text" name="review-text" required></textarea>
+                
+                <label for="rating">Rating:</label>
+                <select>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Star</option>
+                    <option value="3">3 Star</option>
+                    <option value="4">4 Star</option>
+                    <option value="5">5 Star</option>
+                </select>
+                <button type="submit" id="submit">Submit</button>
+            </form>
+        </section>
     </main>
     <script src="scripts.js"></script>
 </body>
