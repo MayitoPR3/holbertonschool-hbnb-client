@@ -3,7 +3,6 @@
 
 // 1. Implementation - Login
 
-// Add an event listener for the form submission
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
 
@@ -11,22 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            // Retrieve email and password values from the form
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             try {
-                // Perform login
                 const response = await loginUser(email, password);
 
                 if (response.ok) {
                     const data = await response.json();
-                    // Store JWT token in cookie
-                    document.cookie = `token=${data.access_token}; path=/`;
-                    // Redirect to main page
-                    window.location.href = 'index.html';
+                    document.cookie = `token=${data.access_token}; path=/; secure; HttpOnly`;
+                    window.location.href = getRedirectURL() || 'index.html';
                 } else {
-                    // Handle login failure
                     const error = await response.json();
                     displayError(`Login failed: ${error.message || response.statusText}`);
                 }
@@ -47,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayError(message) {
-        // Create or select the error message element
         let errorDiv = document.getElementById('error-message');
         if (!errorDiv) {
             errorDiv = document.createElement('div');
@@ -58,7 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         errorDiv.textContent = message;
     }
+
+    function getRedirectURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('redirect') || null;
+    }
 });
+
+
 
 
 
@@ -66,6 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // 2. Implementation - Index (List of Places)
 
 // Check user authentication
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuthentication();
+    setupFilter();
+});
+
 function checkAuthentication() {
     const token = getCookie('token');
     const loginLink = document.getElementById('login-link');
@@ -74,35 +79,83 @@ function checkAuthentication() {
         loginLink.style.display = 'block';
     } else {
         loginLink.style.display = 'none';
-        // Fetch places data if the user is authenticated
         fetchPlaces(token);
     }
 }
+
 function getCookie(name) {
-    //Function to get a cookie value by its name
-    //Your code here
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-//Fetch places data
 async function fetchPlaces(token) {
-    //Make a GET request to fetch places data
-    //Include the token in the Authorization header
-    //Handle the response and pass the data to displayPlaces function
+    try {
+        const response = await fetch('http://127.0.0.1:5000/places', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        displayPlaces(data.places);
+    } catch (error) {
+        console.error('Error fetching places:', error);
+        displayError('Failed to load places. Please try again later.');
+    }
 }
 
-//Populate places list
 function displayPlaces(places) {
-    // Clear the current content of the places list
-    // Iterate over the places data
-    // For each place, create a div element and set its content
-    // Append the created element to the places list
+    const placesList = document.getElementById('places-list');
+    placesList.innerHTML = '';
+
+    places.forEach(place => {
+        const placeCard = document.createElement('div');
+        placeCard.className = 'place-card';
+        placeCard.setAttribute('data-place-id', place.id);
+
+        placeCard.innerHTML = `
+            <img src="${place.image}" alt="${place.name}" class="place-image">
+            <div class="place-details">
+                <h2>${place.name}</h2>
+                <p>Price Per Night: $${place.price}</p>
+                <p>Location: ${place.location}</p>
+                <a href="place.html?placeId=${place.id}" class="details-button">View Details</a>
+            </div>
+        `;
+
+        placesList.appendChild(placeCard);
+    });
 }
 
-//Implement client-side filtering
-document.getElementById('country-filter').addEventListener('change', (event) => {
-    // Get the selected country value
-    // Iterate over the places and show/hide them based on the selected country
-});
+function setupFilter() {
+    document.getElementById('country-filter').addEventListener('change', (event) => {
+        const selectedCountry = event.target.value;
+        const placeCards = document.querySelectorAll('.place-card');
+
+        placeCards.forEach(card => {
+            const location = card.querySelector('.place-details p').textContent;
+            card.style.display = selectedCountry === 'All' || location.includes(selectedCountry) ? 'block' : 'none';
+        });
+    });
+}
+
+function displayError(message) {
+    const errorDiv = document.getElementById('error-message');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+    } else {
+        console.error(message);
+    }
+}
+
+
 
 
 
@@ -112,12 +165,10 @@ document.getElementById('country-filter').addEventListener('change', (event) => 
 // 3. Implementation - Place details
 
 //Get place ID from URL
-function getPlaceIdFromURL() {
-    // Extract the place ID from window.location.search
-    // Your code here
-}
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuthentication();
+});
 
-//Check user authentication
 function checkAuthentication() {
     const token = getCookie('token');
     const addReviewSection = document.getElementById('add-review');
@@ -126,29 +177,64 @@ function checkAuthentication() {
         addReviewSection.style.display = 'none';
     } else {
         addReviewSection.style.display = 'block';
-        // Store the token for later use
-        fetchPlaceDetails(token, placeId);
+
+        const placeId = getPlaceIdFromURL();
+        if (placeId) {
+            fetchPlaceDetails(token, placeId);
+        } else {
+            console.error('Place ID is missing in URL');
+        }
     }
 }
 
-function getCookie(name) {
-    // Function to get a cookie value by its name
-    // Your code here
-}
-
-//Fetch Place Details
 async function fetchPlaceDetails(token, placeId) {
-    // Make a GET request to fetch place details
-    // Include the token in the Authorization header
-    // Handle the response and pass the data to displayPlaceDetails function
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/places/${placeId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const place = await response.json();
+        displayPlaceDetails(place);
+    } catch (error) {
+        console.error('Error fetching place details:', error);
+        displayError('Failed to load place details. Please try again later.');
+    }
 }
 
-//Populate place details
 function displayPlaceDetails(place) {
-    // Clear the current content of the place details section
-    // Create elements to display the place details (name, description, location, images)
-    // Append the created elements to the place details section
+    const placeDetailsSection = document.getElementById('place-details');
+    placeDetailsSection.innerHTML = '';
+
+    const placeCard = document.createElement('div');
+    placeCard.className = 'place-card-large';
+
+    placeCard.innerHTML = `
+        <img src="${place.image}" alt="${place.name}" class="place-image">
+        <h2>${place.name}</h2>
+        <p>Price Per Night: $${place.price}</p>
+        <p>Location: ${place.location}</p>
+    `;
+
+    placeDetailsSection.appendChild(placeCard);
 }
+
+function displayError(message) {
+    const errorDiv = document.getElementById('error-message');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+    } else {
+        console.error(message);
+    }
+}
+
 
 
 
@@ -156,27 +242,7 @@ function displayPlaceDetails(place) {
 
 // 4. Implementation - Add review
 
-//Check user authentication
-function checkAuthentication() {
-    const token = getCookie('token');
-    if (!token) {
-        window.location.href = 'index.html';
-    }
-    return token;
-}
-
-function getCookie(name) {
-    // Function to get a cookie value by its name
-    // Your code here
-}
-
-//Get place ID from URL
-function getPlaceIdFromURL() {
-    // Extract the place ID from window.location.search
-    // Your code here
-}
-
-//Setup event listener for review form
+// Check user authentication
 document.addEventListener('DOMContentLoaded', () => {
     const reviewForm = document.getElementById('review-form');
     const token = checkAuthentication();
@@ -185,27 +251,56 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reviewForm) {
         reviewForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            // Get review text from form
-            // Make AJAX request to submit review
-            // Handle the response
+
+            const reviewText = document.getElementById('review').value;
+            const rating = document.getElementById('rating').value;
+
+            if (reviewText.trim() === '' || isNaN(rating) || rating < 1 || rating > 5) {
+                displayError('Please provide a valid review and rating.');
+                return;
+            }
+
+            await submitReview(token, placeId, reviewText, rating);
         });
     }
 });
 
-//Make AJAX request to submit review
-async function submitReview(token, placeId, reviewText) {
-    // Make a POST request to submit review data
-    // Include the token in the Authorization header
-    // Send placeId and reviewText in the request body
-    // Handle the response
+async function submitReview(token, placeId, reviewText, rating) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/places/${placeId}/reviews`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                review: reviewText,
+                rating: parseInt(rating, 10)
+            })
+        });
+
+        handleResponse(response);
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        displayError('Failed to submit review. Please try again.');
+    }
 }
 
-//Handle API response
 function handleResponse(response) {
     if (response.ok) {
         alert('Review submitted successfully!');
-        // Clear the form
+        document.getElementById('review-form').reset();
     } else {
         alert('Failed to submit review');
     }
 }
+
+function displayError(message) {
+    const errorDiv = document.getElementById('error-message');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+    } else {
+        console.error(message);
+    }
+}
+
