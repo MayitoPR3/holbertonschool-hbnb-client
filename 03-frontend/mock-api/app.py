@@ -1,8 +1,8 @@
 from uuid import uuid4
+import json
 from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
-import json
 
 
 app = Flask(__name__)
@@ -27,7 +27,7 @@ def login():
     password = request.json.get('password')
 
     user = next((u for u in users if u['email'] == email and u['password'] == password), None)
-    
+
     if not user:
         print(f"User not found or invalid password for: {email}")
         return jsonify({"msg": "Invalid credentials"}), 401

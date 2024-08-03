@@ -40,8 +40,10 @@ h1 {
 }
 
 footer {
-    position: relative;
+    position:fixed;
+    bottom: 0;
     padding: 1rem;
+    width: 100%;
     height:auto;  /* Height of the footer */
     background: rgb(17, 17, 51);
     color: #ddd;

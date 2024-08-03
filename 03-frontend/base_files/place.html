@@ -13,9 +13,7 @@
                 <img src="logo.png" alt="App Logo" class="logo">
             </a>
         </nav>
-        <nav>
             <a href="login.html" id="login-link">Login</a>
-        </nav>
     </header>
     <main>
         <section id="place-details">
@@ -40,13 +38,15 @@
             </div>
         </section>
         <section id="add-review">
-            <a href="./add_review.html"></a>
-                <button id="add-review-button">Add a Review</button>
-            </a>
+            <nav>
+                <a href="add_review.html">
+            <button id="add-review-button">Add Review</button>
+                </a>
+            </nav>
             <form id="review-form">
                 <label for="review-text">Your Review:</label>
                 <textarea id="review-text" name="review-text" required></textarea>
-                
+
                 <label for="rating">Rating:</label>
                 <select id="rating" name="rating">
                     <option value="1">1 Star</option>
@@ -60,5 +60,8 @@
         </section>
     </main>
     <script src="scripts.js"></script>
+<footer>
+    &copy; All Rights Reserved
+</footer>
 </body>
 </html>
