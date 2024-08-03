@@ -13,7 +13,9 @@
                 <img src="logo.png" alt="App Logo" class="logo">
             </a>
         </nav>
+        <nav>
             <a href="login.html" id="login-link">Login</a>
+        </nav>
     </header>
     <main>
         <section id="place-details">
@@ -27,33 +29,34 @@
         <section id="reviews">
             <h2>Reviews</h2>
             <div class="review-card">
-                <h2>Jane Smith</h2>
-                <p>Price Per Night: $100</p>
-                <p>Location: Los Angeles, United States</p>
+                <p><strong>User:</strong> Jane Smith</p>
+                <p><strong>Comment:</strong> Beautiful Place!!</p>
+                <p><strong>Rating</strong> ★★★★★</p>
             </div>
             <div class="review-card">
-                <h2>John Doe</h2>
-                <p>Price Per Night: $100</p>
-                <p>Location: Los Angeles, United States</p>
+                <p><strong>User: </strong> Josh Smith</p>
+                <p><strong>Comment:</strong> Was OK...</p>
+                <p><strong>Rating</strong> ★★★☆☆</p>
             </div>
+            <!-- Reviews will be populated dinamically -->
         </section>
         <section id="add-review">
-            <nav>
                 <a href="add_review.html">
-            <button id="add-review-button">Add Review</button>
-                </a>
-            </nav>
+            <h2>Add Review</h2>
             <form id="review-form">
                 <label for="review-text">Your Review:</label>
                 <textarea id="review-text" name="review-text" required></textarea>
 
+                <label for="review-user">Name:</label>
+                <input type="text" id="review-user" name="review-user" required>
+
                 <label for="rating">Rating:</label>
                 <select id="rating" name="rating">
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Star</option>
-                    <option value="3">3 Star</option>
-                    <option value="4">4 Star</option>
-                    <option value="5">5 Star</option>
+                    <option value="1">★☆☆☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="5">★★★★★</option>
                 </select>
                 <button type="submit" id="submit">Submit</button>
             </form>
