@@ -8,19 +8,13 @@
 </head>
 <body>
     <main>
-        <section id="add-review">
-            <form id="review-form">
-                <label for="review-text">Your Review:</label>
-                <textarea id="review-text" name="review-text" required></textarea>
+        <form id="review-form">
+            <h2>Add Review</h2>
+            <label for="place">Place:</label>
+            <input type="text" id="place" name="place" readonly>
 
-                <label for="rating">Rating:</label>
-                <select id="rating" name="rating" required>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Star</option>
-                    <option value="3">3 Star</option>
-                    <option value="4">4 Star</option>
-                    <option value="5">5 Star</option>
-                </select>
+            <label for="review">Your Review:</label>
+            <textarea id="review" name="review" required></textarea>
 
                 <button type="submit" id="submit">Submit</button>
             </form>
